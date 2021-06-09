@@ -596,8 +596,8 @@ function printFoot() {
 }
 
 function showMonthSelect() {
-	var home = "http://www.informatik.uni-leipzig.de/~duc/amlich/JavaScript/";
-	window.open(home, "win2702", "menubar=yes,scrollbars=yes,status=yes,toolbar=yes,resizable=yes,location=yes");
+	// var home = "http://www.informatik.uni-leipzig.de/~duc/amlich/JavaScript/";
+	// window.open(home, "win2702", "menubar=yes,scrollbars=yes,status=yes,toolbar=yes,resizable=yes,location=yes");
 	//window.location = home;
 	//alertAbout();
 }
