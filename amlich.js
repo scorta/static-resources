@@ -1,4 +1,4 @@
-/**
+7/**
  * Copyright 2004 Ho Ngoc Duc [http://come.to/duc]. All Rights Reserved.<p>
  * Permission to use, copy, modify, and redistribute this software and its
  * documentation for personal, non-commercial use is hereby granted provided that
@@ -338,7 +338,7 @@ function getDayString(lunar, solarDay, solarMonth, solarYear) {
 	var s;
 	var dayOfWeek = TUAN[(lunar.jd + 1) % 7];
 	s = dayOfWeek + " " + solarDay + "/" + solarMonth + "/" + solarYear;
-	s += " -+- ";
+	s += " --- ";
 	s = s + "Ng\u00E0y " + lunar.day+" th\341ng "+lunar.month;
 	if (lunar.leap == 1) {
 		s = s + " nhu\u1EADn";
@@ -539,6 +539,8 @@ function printEmptyCell() {
 		return '<td class=ngaythang><div class=cn>&nbsp;</div> <div class=am>&nbsp;</div></td>\n';
 }
 
+var gdd, gmm, gyy, gleap, gjd, gsday, gsmonth, gsyear;
+
 function printCell(lunarDate, solarDate, solarMonth, solarYear) {
 	var cellClass, solarClass, lunarClass, solarColor;
 	cellClass = "ngaythang";
@@ -555,7 +557,14 @@ function printCell(lunarDate, solarDate, solarMonth, solarYear) {
 	}
 	if (solarDate == today.getDate() && solarMonth == today.getMonth()+1 && solarYear == today.getFullYear()) {
 		cellClass = "homnay";
-		args_print_today = lunarDate.day + "," + lunarDate.month + "," + lunarDate.year + "," + lunarDate.leap + "," + lunarDate.jd + "," + solarDate + "," + solarMonth + "," + solarYear;
+		gdd = lunarDate.day;
+		gmm = lunarDate.month;
+		gyy = lunarDate.year;
+		gleap = lunarDate.leap
+		gjd = lunarDate.jd;
+		gsday = solarDate;
+		gsmonth = solarMonth;
+		gsyear = solarYear;
 	}
 	if (lunarDate.day == 1 && lunarDate.month == 1) {
 		cellClass = "tet";
@@ -574,6 +583,10 @@ function printCell(lunarDate, solarDate, solarMonth, solarYear) {
 	if (lunarDate != null) res += (' title="'+getDayName(lunarDate)+'" onClick="alertDayInfo('+args+');"');
 	res += (' <div style=color:'+solarColor+' class="'+solarClass+'">'+solarDate+'</div> <div class="'+lunarClass+'">'+lunar+'</div></td>\n');
 	return res;
+}
+
+function loadTodayDetails() {
+	alertDayInfo(gdd, gmm, gyy, gleap, gjd, gsday, gsmonth, gsyear);
 }
 
 function printFoot() {
@@ -601,32 +614,14 @@ function infoCellSelect(id) {
 
 function alertDayInfo(dd, mm, yy, leap, jd, sday, smonth, syear) {
 	var lunar = new LunarDate(dd, mm, yy, leap, jd);
-	var s = getDayString(lunar, sday, smonth, syear);
-	s += " \u00E2m l\u1ECBch\n";
-	s += getDayName(lunar);
-	s += "\nGi\u1EDD \u0111\u1EA7u ng\u00E0y: "+getCanHour0(jd)+" "+CHI[0];
-	s += "\nTi\u1EBFt: "+TIETKHI[getSunLongitude(jd+1, 7.0)];
-	s += "\nGi\u1EDD ho\u00E0ng \u0111\u1EA1o: "+getGioHoangDao(jd);
-	alert(s);
-}
-
-
-function printDayInfo(dd, mm, yy, leap, jd, sday, smonth, syear) {
-	var args = lunarDate.day + "," + lunarDate.month + "," + lunarDate.year + "," + lunarDate.leap;
-	args += ("," + lunarDate.jd + "," + solarDate + "," + solarMonth + "," + solarYear);
-
-	var lunar = new LunarDate(dd, mm, yy, leap, jd);
 	var s = "<p>" + getDayString(lunar, sday, smonth, syear);
 	s += " \u00E2m l\u1ECBch" + "</p>";
 	s += "<p>" + getDayName(lunar) + "</p>";
 	s += "<p>" + "Gi\u1EDD \u0111\u1EA7u ng\u00E0y: "+getCanHour0(jd)+" "+CHI[0] + "</p>";
 	s += "<p>" + "Ti\u1EBFt: "+TIETKHI[getSunLongitude(jd+1, 7.0)] + "</p>";
 	s += "<p>" + "Gi\u1EDD ho\u00E0ng \u0111\u1EA1o: "+getGioHoangDao(jd) + "</p>";
-	return s;
-}
-
-function printTodayInfo() {
-	return printDayInfo(args_print_today);
+	var element = document.getElementById("date_details");
+	element.innerHTML = s;
 }
 
 function alertAbout() {
